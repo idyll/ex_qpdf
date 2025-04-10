@@ -1,13 +1,25 @@
 defmodule ExQPDF.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+  @source_url "https://github.com/idyll/ex_qpdf"
+  @description """
+  An Elixir wrapper for the QPDF library, providing a simple interface for working with PDF files.
+  Supports password detection, metadata extraction, and more.
+  """
+
   def project do
     [
       app: :ex_qpdf,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: @description,
+      package: package(),
+      docs: docs(),
+      name: "ExQPDF",
+      source_url: @source_url
     ]
   end
 
@@ -22,7 +34,37 @@ defmodule ExQPDF.MixProject do
   defp deps do
     [
       {:jason, "~> 1.4"},
-      {:mock, "~> 0.3.0", only: :test}
+      {:mock, "~> 0.3.0", only: :test},
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false}
+    ]
+  end
+
+  defp package do
+    [
+      name: "ex_qpdf",
+      files: ~w(lib .formatter.exs mix.exs README.md LICENSE),
+      licenses: ["Apache-2.0"],
+      links: %{
+        "GitHub" => @source_url,
+        "QPDF" => "https://github.com/qpdf/qpdf"
+      },
+      maintainers: ["Mark Madsen"]
+    ]
+  end
+
+  defp docs do
+    [
+      main: "ExQPDF",
+      source_url: @source_url,
+      extras: ["README.md", "LICENSE"],
+      groups_for_modules: [
+        Core: [
+          ExQPDF
+        ],
+        Structs: [
+          ExQPDF.Handle
+        ]
+      ]
     ]
   end
 end
