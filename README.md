@@ -72,7 +72,7 @@ Add `ex_qpdf` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_qpdf, "~> 0.1.1"}
+    {:ex_qpdf, "~> 0.1.2"}
   ]
 end
 ```

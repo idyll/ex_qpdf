@@ -78,17 +78,17 @@ defmodule ExQPDFTest do
       assert handle.path == @open_pdf
       assert handle.password == nil
     end
-  
+
     test "successfully opens PDF with only owner password" do
       assert {:ok, handle} = ExQPDF.open(@locked_pdf)
       assert handle.path == @locked_pdf
       assert handle.password == nil
     end
-  
+
     test "fails to open password-encrypted PDF without password" do
       assert {:error, _} = ExQPDF.open(@encrypted_pdf)
     end
-  
+
     test "successfully opens password-encrypted PDF with correct password" do
       # The password for example_encrypted.pdf is "open"
       password = "open"
@@ -101,16 +101,16 @@ defmodule ExQPDFTest do
   describe "metadata/2 (with real files)" do
     test "extracts metadata from PDF with no password" do
       assert {:ok, metadata} = ExQPDF.metadata(@open_pdf)
-    
+
       # Basic PDF information
       assert metadata.password_required == false
       assert metadata.page_count > 0
       assert is_binary(metadata.version)
-    
+
       # Document metadata - validate structure but not exact content
       # since it may vary between test environments
       assert is_map(metadata)
-    
+
       # Check for common metadata fields
       # Not all PDFs will have all fields, so we don't assert specific values
       assert Map.has_key?(metadata, :title)
@@ -118,28 +118,28 @@ defmodule ExQPDFTest do
       assert Map.has_key?(metadata, :creator)
       assert Map.has_key?(metadata, :producer)
     end
-  
+
     test "returns limited info for password-protected PDF without password" do
       assert {:ok, metadata} = ExQPDF.metadata(@encrypted_pdf)
       assert metadata.password_required == true
-    
+
       # No detailed metadata should be available without the password
       refute Map.has_key?(metadata, :title)
       refute Map.has_key?(metadata, :author)
     end
-  
+
     test "extracts metadata from password-protected PDF with correct password" do
       password = "open"
       assert {:ok, metadata} = ExQPDF.metadata(@encrypted_pdf, password: password)
-    
+
       # Basic PDF information
       assert metadata.password_required == false
       assert metadata.page_count > 0
       assert is_binary(metadata.version)
-    
+
       # For encrypted PDFs
       assert metadata.encrypted == true
-    
+
       # Document metadata structure should be present
       assert is_map(metadata)
     end
